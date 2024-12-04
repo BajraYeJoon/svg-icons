@@ -1,0 +1,58 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  frontmatter: {
+    title: string;
+  };
+}
+
+const { title = 'Documentation', frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title || title}>
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto prose prose-slate">
+      <slot />
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  .prose {
+    max-width: 65ch;
+    color: rgb(51 65 85);
+  }
+  .prose :where(h1):not(:where([class~="not-prose"] *)) {
+    color: rgb(15 23 42);
+    font-weight: 800;
+    font-size: 2.25em;
+    margin-top: 0;
+    margin-bottom: 0.8888889em;
+    line-height: 1.1111111;
+  }
+  .prose :where(code):not(:where([class~="not-prose"] *)) {
+    color: rgb(51 65 85);
+    font-weight: 600;
+    font-size: 0.875em;
+  }
+  .prose :where(code):not(:where([class~="not-prose"] *))::before {
+    content: "`";
+  }
+  .prose :where(code):not(:where([class~="not-prose"] *))::after {
+    content: "`";
+  }
+  .prose :where(pre):not(:where([class~="not-prose"] *)) {
+    color: rgb(226 232 240);
+    background-color: rgb(30 41 59);
+    overflow-x: auto;
+    font-weight: 400;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    margin-top: 1.7142857em;
+    margin-bottom: 1.7142857em;
+    border-radius: 0.375rem;
+    padding: 0.8571429em 1.1428571em;
+  }
+</style>

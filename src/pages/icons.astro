@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SearchBar from '../components/ui/SearchBar.astro';
+import IconCard from '../components/IconCard.astro';
+import Button from '../components/ui/Button.astro';
+import { icons, categories } from '../data/icons';
+---
+
+<Layout title="Browse Icons - SVG Icon Library">
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold mb-8">Browse Icons</h1>
+      
+      <SearchBar class="mb-8" />
+
+      <div class="flex gap-2 overflow-x-auto pb-4 mb-8">
+        {categories.map(category => (
+          <Button
+            variant={category === 'All' ? 'primary' : 'outline'}
+            size="sm"
+            data-category={category}
+            class="category-filter"
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {icons.map(icon => (
+          <div data-icon-card data-name={icon.name} data-category={icon.category}>
+            <IconCard {...icon} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const categoryButtons = document.querySelectorAll('.category-filter');
+  const iconCards = document.querySelectorAll('[data-icon-card]');
+
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const selectedCategory = button.getAttribute('data-category');
+      
+      // Update button styles
+      categoryButtons.forEach(btn => {
+        btn.classList.toggle('bg-primary-600', btn.getAttribute('data-category') === selectedCategory);
+        btn.classList.toggle('text-white', btn.getAttribute('data-category') === selectedCategory);
+      });
+
+      // Filter icons
+      iconCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        const shouldShow = selectedCategory === 'All' || cardCategory === selectedCategory;
+        card.classList.toggle('hidden', !shouldShow);
+      });
+    });
+  });
+</script>
